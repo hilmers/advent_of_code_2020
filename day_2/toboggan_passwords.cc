@@ -41,7 +41,7 @@ std::vector<int> GetRange(const std::string& policy) {
     return {min, max};
 }
 
-int NumberOfValidPasswords(const std::vector<std::string>& policy_and_passwords) {
+int ValidPasswordsOccurenceCheck(const std::vector<std::string>& policy_and_passwords) {
     int valid_pass = 0;
     for (int i = 0; i < policy_and_passwords.size(); ++i) {
         auto pap = GetPasswordAndPolicy(policy_and_passwords[i]);
@@ -50,16 +50,14 @@ int NumberOfValidPasswords(const std::vector<std::string>& policy_and_passwords)
         char policy_char = policy.back();
         int occurences = count(password.begin(), password.end(), policy_char);
         auto range = GetRange(policy);
-        std::cout << "Min: " << range.front() << " Max: " << range.back() << " Occurences: " << occurences << "\n";
         if (range.front() <= occurences && occurences <= range.back()) {
-            std::cout << "VALID!\n";
             valid_pass += 1;
         }
     }
     return valid_pass;
 }
 
-int NumberOfValidPasswordsTwo(const std::vector<std::string>& policy_and_passwords) {
+int ValidPasswordsFixedCharacters(const std::vector<std::string>& policy_and_passwords) {
     int valid_pass = 0;
     for (int i = 0; i < policy_and_passwords.size(); ++i) {
         auto pap = GetPasswordAndPolicy(policy_and_passwords[i]);
@@ -67,9 +65,12 @@ int NumberOfValidPasswordsTwo(const std::vector<std::string>& policy_and_passwor
         auto password = pap.back();
         char policy_char = policy.back();
         auto indexes = GetRange(policy);
-        std::cout << "First: " << password.at(indexes.front() - 1) << " Last: " << password.at(indexes.back() - 1) << "\n";
-        if (password.at(indexes.front() - 1) == policy_char && password.at(indexes.back() - 1) != policy_char) {
-            std::cout << "VALID!\n";
+
+        char first_char = password.at(indexes.front() - 1);
+        char second_char = password.at(indexes.back() - 1);
+        if (first_char == policy_char && second_char != policy_char) {
+            valid_pass += 1;
+        } else if (first_char != policy_char && second_char == policy_char) {
             valid_pass += 1;
         }
     }
@@ -77,9 +78,9 @@ int NumberOfValidPasswordsTwo(const std::vector<std::string>& policy_and_passwor
 }
 
 int main() {
-    std::vector<std::string> paps = {"1-3 a: abcde", "1-3 b: cdefg", "2-9 c: ccccccccc"};
     std::vector<std::string> passwords_input = CreateVectorFromFile("input.txt");
-    int valids = NumberOfValidPasswordsTwo(passwords_input);
+    int occurence_check_result = ValidPasswordsOccurenceCheck(passwords_input);
+    int fixed_check_result = ValidPasswordsFixedCharacters(passwords_input);
     // int valids = NumberOfValidPasswordsTwo(paps);
-    std::cout << "Valid passwords: " << valids << "\n";
+    std::cout << "1: " << occurence_check_result << "\n2: " << fixed_check_result << "\n";
 }
