@@ -3,7 +3,6 @@
 #include <fstream>
 #include <iterator>
 #include <iostream>
-#include <unordered_map>
 #include <vector>
 #include <sstream>
 
@@ -24,12 +23,17 @@ std::vector<std::string> CreateVectorFromFile(std::string input_filename) {
     return all_lines;
 }
 
-std::vector<std::string> GetPasswordAndPolicy(const std::string& policy_and_password) {
-    auto policy_password_split = Split(policy_and_password, ':');
-    std::string password = policy_password_split.back();
+std::string RemoveWhiteSpace(const std::string& password) {
     std::string::iterator end_pos = std::remove(password.begin(), password.end(), ' ');
     password.erase(end_pos, password.end());
-    policy_password_split.back() = password;
+    // Password is now cleaned of white spaces
+    return password;
+}
+
+std::vector<std::string> GetPasswordAndPolicy(const std::string& policy_and_password) {
+    auto policy_password_split = Split(policy_and_password, ':');
+    std::string dirty_password = policy_password_split.back();
+    std::string password = RemoveWhiteSpace(dirty_password);
     return policy_password_split;
 }
 
