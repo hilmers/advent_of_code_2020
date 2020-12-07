@@ -6,14 +6,14 @@
 
 constexpr int kTwentyKTwenty = 2020;
 
-std::vector<int> createVectorFromFile(std::string input_filename) {
+std::vector<int> CreateVectorFromFile(std::string input_filename) {
     std::ifstream is(input_filename);
     std::istream_iterator<int> start(is), end;
     std::vector<int> expenses(start, end);
     return expenses;
 }
 
-int multipliedSumOfTwo(const std::vector<int>& input) {
+int MultipliedSumOfTwo(const std::vector<int>& input) {
     // Key is the number missing from input for addition to be 2020
     std::unordered_map<int, int> input_missing_mapper = {};
     for (int i = 0; i < input.size(); ++i) {
@@ -27,7 +27,7 @@ int multipliedSumOfTwo(const std::vector<int>& input) {
     return -1;
 }
 
-int multipliedSumOfThree(const std::vector<int>& input) {
+int MultipliedSumOfThree(const std::vector<int>& input) {
     std::unordered_map<int, std::vector<int>> input_missing_mapper;
     for (int i = 0; i < input.size(); ++i) {
         if (input_missing_mapper.find(input[i]) != input_missing_mapper.end()) {
@@ -43,9 +43,9 @@ int multipliedSumOfThree(const std::vector<int>& input) {
 }
 
 int main() {
-    std::vector<int> expenses_input = createVectorFromFile("input.txt");
-    int result_two = multipliedSumOfTwo(expenses_input);
-    int result_three = multipliedSumOfThree(expenses_input);
+    std::vector<int> expenses_input = CreateVectorFromFile("input.txt");
+    int result_two = MultipliedSumOfTwo(expenses_input);
+    int result_three = MultipliedSumOfThree(expenses_input);
     std::cout << "Two numbers: "<< result_two << "\n";
     std::cout << "Three numbers: " << result_three << "\n";
 }
